@@ -17,7 +17,7 @@ program ExamHalls
         
         if (student_id < 215001 .or. student_id > 221999) then
             print*, "Your student number is not valid. Please enter it again."
-            print*, "If you are not sure, press control+C on your keyboard and try again lat210er."
+            print*, "If you are not sure, press control+C on your keyboard and try again later."
             read*, student_id
             last_digits = MOD(student_id, 100)
             cycle
