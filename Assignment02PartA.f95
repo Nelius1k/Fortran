@@ -39,8 +39,11 @@ program conversion
     !end do
 
     write(*, '("   ", A, 6X, A, 6X, A)') "Celsius", "Fahrenheit", "Kelvin"
+    
     do i = 1, int(rows)
-        write(*,*) (myTable(i, j), j = 1, cols)
+
+        write(*, '(F10.5, A, F10.5, A, F10.5)') myTable(i, 1), "     ", myTable(i, 2), "     ", myTable(i, 3)
+
     end do
 
 
