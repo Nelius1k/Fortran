@@ -1,0 +1,24 @@
+Cities With their Population Density per Square Mile 
+Bei Brak         Israel         70810 
+Caloocan         Philippines    72490 
+Subang Jaya      Malaysia       61930 
+Baghdad          Iraq           85140 
+Mumbai           India          83660 
+Dhaka            Bangladesh     75290 
+Damascus         Syria          57550 
+Port-au-Prince   Haiti          70950 
+Pateros          Philippines    94400 
+Levallois-Perret France         69190 
+Vincennes        France         67650 
+Manila           Philippines    119600 
+Malé             Maldives       59570 
+Saint-Mandé      France         63680 
+Makati           Philippines    63060 
+Kathmandu        Nepal          61960 
+Kolkata          India          62950 
+Montrouge        France         62900 
+Neapoli          Greece         59960 
+Manda luyong     Philippines    90460 
+Guttenberg       United States  58650 
+Karachi          Pakistan       65340 
+Ma labon         Philippines    57340
