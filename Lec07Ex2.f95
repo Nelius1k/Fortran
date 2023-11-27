@@ -9,16 +9,20 @@ program example
 
     call ConvMAT(M)
 
+    print*, sum(M)
+    
     do i = 1, 3
         print*, M(i, :)
     end do
+
+    
     
     contains
 
     subroutine ConvMAT(matrix)
 
         integer, intent(inout) :: matrix(3,4)
-        integer :: i,j 
+        integer :: j 
 
         do i = 1, size(matrix, 1)
             do j = 1, size(matrix, 2)
