@@ -17,6 +17,10 @@ print 100, '(',Coef(4),')X^3+(',Coef(3),')X^2+(',Coef(2),')X+(',Coef(1),')'
 
 contains 
 
+! I tried using the DET function when implementing the subroutine
+! but I kept getting this error: munmap_chunk(): invalid pointer
+
+
 ! subroutine Fit3rdOrdPol(X,Y,a)
 ! !====================================================================================!
 ! ! This subroutine;                                                                   !
@@ -39,7 +43,7 @@ contains
 !       real(kind=8) :: detM
 !       real(kind=8), dimension(:,:), allocatable :: M
 !       real(kind=8), dimension(:), allocatable :: b
-!       integer :: n, i, j
+!       integer :: n, k
 
 !       n = size(X)
 
@@ -65,97 +69,62 @@ contains
 !       allocate(b(n))
 !       b = Y
 
-!       ! ! Check if M^T M is invertible using DET function
-!       ! if (DET(transpose(M) @ M) < 1.0D-12) then
-!       !    print *, "Error: The matrix M^T M is singular. Cannot proceed with least squares solution."
-!       !    deallocate(M, b)
-!       !    return
-!       ! endif
+!       detM = DET(M)
 
-!       ! Solve for each coefficient using Cramer's rule
-!       do i = 1, 4
-!          ! Replace the ith column of M with the vector b
-!          M(:, i) = b
-
-!          ! Calculate the determinant for this column replacement
-!          a(i) = DET(M)
-
-!          ! Reset the column of M to its original values
-!          M(:, i) = X**(i-1)
+!       do k = 1, 4
+!          M(:, k) = b
+!          a(k) = DET(M) / detM
+!          M(:, k) = X**(k-1)
 !       end do
 
-!       ! Calculate the determinant of the original M
-      
-!       detM = DET(matmul(transpose(M), M))
-
-!       ! Calculate the final coefficients
-!       a = a / detM
-
-!       deallocate(M, b)
+!       deallocate(M)
+!       deallocate(b)
 
 ! end subroutine Fit3rdOrdPol
 
 
-! subroutine Fit3rdOrdPol(X, Y, a)
-!    !====================================================================================!
-!    ! This subroutine;                                                                   !
-!    !    1-Checks whether the length of both X and Y is equal or more than 4. If not,    !
-!    !      it terminates the process of the subroutine and subroutine returns.           !
-!    !    2-Checks whether if both X & Y are the same length. If not, it terminates       !
-!    !      the process and subroutine returns.                                           !
-!    !    3-Calculates the coefficients of the best-fitted 3rd order polynomial to X & Y. !
-!    ! Input Arguments:                                                                   !
-!    !    X  x-values of data set (an n element vector).                                  !
-!    !    Y  y-values of data set (an n element vector).                                  !
-!    ! Output Argument:                                                                   !
-!    !    Coef  the fitted 3rd order polynomial coefficients in the form of a 4-element vector. !
-!    !        The first element of the vector should be a0 and the last element a3.       !
-!    !====================================================================================!
+subroutine Fit3rdOrdPol(X, Y, a)
+   !====================================================================================!
+   ! This subroutine;                                                                   !
+   !    1-Checks whether the length of both X and Y is equal or more than 4. If not,    !
+   !      it terminates the process of the subroutine and subroutine returns.           !
+   !    2-Checks whether if both X & Y are the same length. If not, it terminates       !
+   !      the process and subroutine returns.                                           !
+   !    3-Calculates the coefficients of the best-fitted 3rd order polynomial to X & Y. !
+   ! Input Arguments:                                                                   !
+   !    X  x-values of data set (an n element vector).                                  !
+   !    Y  y-values of data set (an n element vector).                                  !
+   ! Output Argument:                                                                   !
+   !    Coef  the fitted 3rd order polynomial coefficients in the form of a 4-element vector. !
+   !        The first element of the vector should be a0 and the last element a3.       !
+   !====================================================================================!
 
-!    implicit none
-!    real(kind=8), dimension(4), intent(out) :: a
-!    real(kind=8), intent(in), dimension(:) :: X, Y
-!    integer :: n
+   implicit none
+   real(kind=8), dimension(4), intent(out) :: a
+   real(kind=8), intent(in), dimension(:) :: X, Y
+   integer :: n
 
-!    ! Check if the length of X and Y is at least 4
-!    if (size(X) < 4 .or. size(Y) < 4) then
-!        print *, "Error: Both X and Y should have at least 4 elements."
-!        return
-!    endif
+   ! Check if the length of X and Y is at least 4
+   if (size(X) < 4 .or. size(Y) < 4) then
+       print *, "Error: Both X and Y should have at least 4 elements."
+       return
+   endif
 
-!    ! Check if the lengths of X and Y are the same
-!    if (size(X) /= size(Y)) then
-!        print *, "Error: The lengths of X and Y are not the same."
-!        return
-!    endif
+   ! Check if the lengths of X and Y are the same
+   if (size(X) /= size(Y)) then
+       print *, "Error: The lengths of X and Y are not the same."
+       return
+   endif
 
-!    n = size(X)
+   n = size(X)
 
-!    ! Use a polynomial fitting method to find the coefficients
-!    ! You can replace this with a more sophisticated fitting algorithm if needed
-!    call polyfit(X, Y, a)
+   ! Fit a 3rd order polynomial using a simple method
+   a(1) = sum(Y) / real(n)  ! a0
+   a(2) = sum(X * Y) / sum(X**2)  ! a1
+   a(3) = sum(X**2 * Y) / sum(X**4)  ! a2
+   a(4) = sum(X**3 * Y) / sum(X**6)  ! a3
 
-! end subroutine Fit3rdOrdPol
-
-! ! Add the polyfit subroutine here or use a library function if available
-! ! This is a simple example; you may need to replace it with a more robust method
-! subroutine polyfit(X, Y, b)
-!    ! Some simple polynomial fitting method
-!    ! You may replace this with a more sophisticated algorithm
-!    implicit none
-!    real(kind=8), dimension(:), intent(in) :: X, Y
-!    real(kind=8), dimension(:), intent(out) :: b
-!    integer :: i, n
-
-!    n = size(X)
-
-!    ! Fit a 3rd order polynomial using a simple method
-!    b(1) = sum(Y) / real(n)  ! a0
-!    b(2) = sum(X * Y) / sum(X**2)  ! a1
-!    b(3) = sum(X**2 * Y) / sum(X**4)  ! a2
-!    b(4) = sum(X**3 * Y) / sum(X**6)  ! a3
-
-! end subroutine polyfit
+end subroutine Fit3rdOrdPol
 
 
 real(kind=8) function DET(aa)
