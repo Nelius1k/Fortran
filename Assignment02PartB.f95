@@ -1,42 +1,22 @@
 program VehicleEntrySearch
     implicit none
 
-    character(len=100) :: inputFile, outputFile, line
-    integer :: fileUnitInput, fileUnitOutput, io
+    character(len=100) :: line
+    character(len=10) :: make, color, plate
+    integer :: year, month, day, hr, min, sec, iost, i
 
-    
-    inputFile = 'logfile.txt'    
-    outputFile = 'output.txt'   
+    open(10, file='logfile.txt')
+    do i = 0, 2
+        read(10,'(a)') line
+    end do
 
-   
-    open(unit=10, file=inputFile, status='old', action='read', iostat=io)
-    if (io /= 0) then
-        print *, "Error opening input file"
-        stop
-    end if
-
-    
-    open(unit=11, file=outputFile, status='unknown', action='write', iostat=io)
-    if (io /= 0) then
-        print *, "Error creating or opening output file"
-        stop
-    end if
-
-    
-    do
-        read(10, '(A)', iostat=io) line
-        if (io /= 0) then
-            print *, "End of file or read error"
+    do 
+        read(10,100) make, color, plate, year, month, day, hr, min, sec
+        if (iost /= 0) then
+            print*, "Error reading line:", iost
             exit
         end if
-
-        
-        if (index(line(36:43), ' 15 ') /= 0) then 
-            write(11, '(A)') line
-        end if
+        print*, make, color, plate
     end do
-    
-    close(fileUnitInput)
-    close(fileUnitOutput)
-
+    100 format(a8,1x,a7,3x,a9,1x,i5,1x,i3,1x,i2,1x,i3,1x,i3,1x,i3)
 end program VehicleEntrySearch
