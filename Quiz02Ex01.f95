@@ -13,8 +13,9 @@ program XYZ
     do i=1, 10
         read(10,100) name, id, idNum
         
+        ! Get the last character of a string
         lastCharacter = name(len_trim(name):len(name))
-        !print*, lastCharacter
+        
         if ( (mod(idNum,10) .eq. 4) .and. (lastCharacter .eq. charCheck)) then
             print*, "Name: ", trim(name), " ID: ", idNum
         end if
